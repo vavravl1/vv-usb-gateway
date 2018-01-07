@@ -1024,7 +1024,6 @@ static void update_vv_display(uint64_t *device_address, usb_talk_payload_t *payl
 {
     struct vv_radio_string_string_packet packet;
     packet.device_address = *device_address;
-    size_t value_size = VV_RADIO_STRING_VALUE_SIZE;
     float value_to_set;
     if (!usb_talk_payload_get_float(payload, &value_to_set)) {
         return;
