@@ -8,6 +8,11 @@
 
 #include "vv_radio.h"
 #include "vv_radio_watering.h"
+#include "usb_talk.h"
+#include "radio.h"
+#include "eeprom.h"
+#include "application.h"
+#include "sensors.h"
 
 #define APPLICATION_TASK_ID 0
 
@@ -103,7 +108,8 @@ const usb_talk_subscribe_t subscribes[] = {
     {"vv-display/-/terrace/set", update_vv_display, 0, "terrace"},
     {"vv-display/-/bedroom/set", update_vv_display, 0, "bedroom"},
     {"vv-display/-/co2/set", update_vv_display, 0, "co2"},
-    {"vv-display/-/thermostat/set", update_vv_display, 0, "thermo"}    
+    {"vv-display/-/thermostat/set", update_vv_display, 0, "thermo"},
+    {"vv-display/-/blinds/set", update_vv_display, 0, "blind"}
 };
 
 void application_init(void)
@@ -1025,11 +1031,15 @@ static void update_vv_display(uint64_t *device_address, usb_talk_payload_t *payl
     struct vv_radio_string_string_packet packet;
     packet.device_address = *device_address;
     float value_to_set;
-    if (!usb_talk_payload_get_float(payload, &value_to_set)) {
+    size_t value_size = VV_RADIO_STRING_VALUE_SIZE;
+    memcpy(packet.key, (char*)sub -> param, VV_RADIO_STRING_KEY_SIZE);
+    if (usb_talk_payload_get_float(payload, &value_to_set)) {
+        sprintf(packet.value, "%f", value_to_set);
+    } else if(usb_talk_payload_get_string(payload, packet.value, &value_size)) {
+        // All work done in usb_talk_payload_get_string()
+    } else {
         return;
     }
-    memcpy(packet.key, (char*)sub -> param, VV_RADIO_STRING_KEY_SIZE);
-    sprintf(packet.value, "%f", value_to_set);
 
     vv_radio_send_string(&packet);
 }
