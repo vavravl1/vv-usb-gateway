@@ -316,10 +316,10 @@ void bc_radio_pub_on_buffer(uint64_t *id, uint8_t *buffer, size_t length)
     bc_led_pulse(&led, 10);
 
     if(buffer[0] == VV_RADIO_SINGLE_FLOAT) {
-	struct vv_radio_single_float_packet packet;
-	vv_radio_parse_incoming_buffer(length, buffer, &packet);
-	process_incoming_packet(&packet);
-	return;
+        struct vv_radio_single_float_packet packet;
+        vv_radio_parse_incoming_buffer(length, buffer, &packet);
+        process_incoming_packet(&packet);
+        return;
     }
 
     if (length == 13)
@@ -389,19 +389,14 @@ static void relay_state_set(uint64_t *id, usb_talk_payload_t *payload, usb_talk_
     (void) sub;
     bool state;
 
-    if (!usb_talk_payload_get_bool(payload, &state))
-    {
+    if (!usb_talk_payload_get_bool(payload, &state)) {
         return;
     }
 
-    if (my_id == *id)
-    {
+    if (my_id == *id) {
         bc_module_power_relay_set_state(state);
-
         usb_talk_publish_relay(&my_id, &state);
-    }
-    else
-    {
+    } else {
         bc_radio_node_state_set(id, BC_RADIO_NODE_STATE_POWER_MODULE_RELAY, &state);
     }
 }
@@ -433,18 +428,13 @@ static void module_relay_state_set(uint64_t *id, usb_talk_payload_t *payload, us
         return;
     }
 
-    if (my_id != *id)
-    {
+    if (my_id != *id) {
         bc_radio_node_state_set(id, sub->number == 0 ? BC_RADIO_NODE_STATE_RELAY_MODULE_0 : BC_RADIO_NODE_STATE_RELAY_MODULE_1, &state);
-    }
-#if CORE_MODULE
-    else
-    {
+    } else {
         bc_module_relay_set_state(sub->number == 0 ? &relay_0_0 : &relay_0_1, state);
         bc_module_relay_state_t relay_state = state ? BC_MODULE_RELAY_STATE_TRUE : BC_MODULE_RELAY_STATE_FALSE;
         usb_talk_publish_module_relay(&my_id, &sub->number, &relay_state);
     }
-#endif
 }
 
 static void module_relay_pulse(uint64_t *id, usb_talk_payload_t *payload, usb_talk_subscribe_t *sub)

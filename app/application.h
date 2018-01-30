@@ -3,7 +3,7 @@
 
 #define CORE_MODULE 1
 #define VERSION "vdev"
-#define FIRMWARE "vv-usb-gateway"
+#define FIRMWARE "bcf-gateway-core-module"
 #define TALK_OVER_CDC 1
 #define GPIO_LED BC_GPIO_LED
 

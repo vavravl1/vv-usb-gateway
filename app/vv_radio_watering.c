@@ -1,6 +1,6 @@
 
 #include "vv_radio_watering.h"
-#include <usb_talk.h>
+#include "usb_talk.h"
 
 void process_incoming_packet(struct vv_radio_single_float_packet *packet) {
     switch(packet->type) {
