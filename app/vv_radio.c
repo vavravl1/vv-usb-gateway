@@ -31,7 +31,9 @@ void vv_radio_parse_incoming_string_buffer(size_t length, uint8_t *buffer, struc
 
     memcpy(& target -> device_address, buffer + VV_RADIO_STRING_ADDRESS, sizeof(uint64_t));
     strncpy(target -> key, (char*)(buffer + VV_RADIO_STRING_KEY), VV_RADIO_STRING_KEY_SIZE);
+    target -> key[VV_RADIO_STRING_KEY_SIZE - 1] = '\0';
     strncpy(target -> value, (char*)(buffer + VV_RADIO_STRING_VALUE), VV_RADIO_STRING_VALUE_SIZE);
+    target -> value[VV_RADIO_STRING_VALUE_SIZE - 1] = '\0';
 }
 
 void vv_radio_send_string(struct vv_radio_string_string_packet *source) {
