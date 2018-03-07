@@ -1053,3 +1053,10 @@ void usb_talk_publish_watering_water_level(uint64_t *device_address, uint8_t wat
     usb_talk_send_string((const char *) _usb_talk.tx_buffer);
 }
 
+void usb_talk_publish_string_string_packet(const uint64_t *device_address, const char *key, const char *value) {
+    snprintf(_usb_talk.tx_buffer, sizeof(_usb_talk.tx_buffer),
+             "[\"%012llx/generic/-/%s\", \"%s\"]\n",
+             *device_address, key, value);
+
+    usb_talk_send_string((const char *) _usb_talk.tx_buffer);
+}

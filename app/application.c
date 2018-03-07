@@ -322,6 +322,13 @@ void bc_radio_pub_on_buffer(uint64_t *id, uint8_t *buffer, size_t length)
         return;
     }
 
+    if(buffer[0] == VV_RADIO_STRING_STRING) {
+        struct vv_radio_string_string_packet packet;
+        vv_radio_parse_incoming_string_buffer(length, buffer, &packet);
+        usb_talk_publish_string_string_packet(&packet.device_address, packet.key, packet.value);
+        return;
+    }
+
     if (length == 13)
     {
         switch (buffer[0])

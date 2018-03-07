@@ -4,6 +4,7 @@
 #include <bc_common.h>
 #include <jsmn.h>
 #include <bc_module_relay.h>
+#include "vv_radio.h"
 
 #define USB_TALK_INT_VALUE_NULL INT32_MIN
 #define USB_TALK_DEVICE_ADDRESS "%012llx"
@@ -82,4 +83,5 @@ void usb_talk_publish_watering_humidity(uint64_t *device_address, uint8_t humidi
 void usb_talk_publish_watering_pump(uint64_t *device_address, uint8_t watering_pump);
 void usb_talk_publish_watering_water_level(uint64_t *device_address, uint8_t watering_water_level);
 
+void usb_talk_publish_string_string_packet(const uint64_t *device_address, const char *key, const char *value);
 #endif /* _USB_TALK_H */
